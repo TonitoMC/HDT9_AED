@@ -22,5 +22,6 @@ Adicionalmente se genera el siguiente Grafo:
 
 ![image](https://github.com/TonitoMC/HDT9_AED/assets/138615863/b73cce69-8ca4-4462-86c8-b3e3be4ed8d4)
 
+También incluye la funcionalidad de re-dibujar los grafos, en caso que el Seed del Spring Layout cree un overlap entre diferentes nodos o la imagen no esté lo suficientemente clara.
 ## Instalación
 Este proyecto fue escrito en [Python](https://www.python.org/). Utiliza [NetworkX](https://networkx.org/), [Numpy](https://numpy.org/) y [Matplotlib](https://matplotlib.org/), por lo cuál es necesario tener instaladas estas dependencias para asegurar el funcionamiento correcto del programa.
