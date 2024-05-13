@@ -13,7 +13,9 @@ Al iniciar el programa se despliega un grafo que muestra las rutas del archivo, 
 
 Luego se le pide al usuario ingresar el nombre de la estación de salida, se utiliza el algoritmo de Dijkstra para determinar las rutas más cortas para cada destino posible. En el caso de elegir como estación de salida "Pueblo Paleta" se obtiene el siguiente output:
 ```
-{'Pueblo Paleta': 0, 'Aldea Azalea': 100, 'Ciudad Safiro': 250}
+Destino: Pueblo Paleta, Ruta: Pueblo Paleta, Distancia: 0
+Destino: Aldea Azalea, Ruta: Pueblo Paleta -> Aldea Azalea, Distancia: 100
+Destino: Ciudad Safiro, Ruta: Pueblo Paleta -> Aldea Azalea -> Ciudad Safiro, Distancia: 250
 ```
 ## Instalación
 Este proyecto fue escrito en [Python](https://www.python.org/). Utiliza [NetworkX](https://networkx.org/), [Numpy](https://numpy.org/) y [Matplotlib](https://matplotlib.org/), por lo cuál es necesario tener instaladas estas dependencias para asegurar el funcionamiento correcto del programa.
