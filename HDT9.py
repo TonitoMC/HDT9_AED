@@ -3,27 +3,27 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 import heapq
-destinations_set = set()
 
-
-
-#Funcion que lee el archivo, agrega las ciudades a un set (para que se creen los nodos).
-#Agrega las rutas a una lista de tuplas
-
+#Crea el grafo basado en el archivo de texto
 G = nx.Graph()
+with open("rutas.txt", "r") as file:
+    #Para cada linea del archivo
+    for line in file:
+        #Separa los valores por coma
+        parts = line.strip().split(",")
+        #Obtiene los nombres de los nodos y el valor de la relacion entre ambos
+        node1 = parts[0].strip('"')
+        node2 = parts[1].strip().strip('"')
+        weight = int(parts[2].strip())
+        #Agrega los nodos en caso que no existan
+        G.add_node(node1)
+        G.add_node(node2)
+        #Agrega las relaciones entre nodos
+        G.add_edge(node1, node2, weight=weight)
 
-G.add_nodes_from(["Pueblo Paleta", "Aldea Azalea", "Ciudad Safiro", "Ciudad Lavanda", "Aldea Fuego"])
-
-G.add_edge("Pueblo Paleta", "Aldea Azalea", weight = 100)
-G.add_edge("Aldea Azalea","Ciudad Safiro" , weight = 150)
-G.add_edge("Pueblo Paleta", "Ciudad Safiro", weight = 800)
-G.add_edge("Ciudad Lavanda", "Aldea Fuego", weight = 800)
+# Dibuja el grafo
 pos = nx.spring_layout(G, k=0.9, iterations=30)
-
-nx.draw(G, pos, arrows=None, with_labels=True, node_size = 450)
-
-def sort_by_value(dictionary):
-    return dict(sorted(dictionary.items(), key=lambda item: item[1]))
+nx.draw(G, pos, arrows=None, with_labels=True, node_size=450)
 
 #Dijkstra
 def Dijkstra(startNode):
