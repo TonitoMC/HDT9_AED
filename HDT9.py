@@ -67,8 +67,8 @@ def Dijkstra(startNode):
                 predecessors[neighbor] = current_node  # Actualiza el nodo predecesor para el vecino
                 heapq.heappush(heap, (distances[neighbor], neighbor))
         out_distances[current_node] = current_distance
-    D = nx.Graph()
     # Imprime destinos y sus rutas, borra startNode de los valores del diccionario
+    D.clear()
     del out_distances[startNode]
     for destination, distance in out_distances.items():
         route = [destination]
@@ -89,14 +89,16 @@ def Dijkstra(startNode):
     nx.draw_networkx_edge_labels(D, pos, edge_labels=edge_labels, font_size=6)
     plt.show()
 
-
+D = nx.Graph()
 plt.show()
 mainMenu = True
 while(mainMenu):
     print("Bienvenido al programa para agendar viajes, puedes consultar la imagen generada para ver las posibles rutas")
     print("o igresar el numero correspondiente a cualquiera de las opciones a continuacion")
-    print("1. Regenerar grafo (En caso que exista un overlap de los nodos o no se vea claramente)")
-    mainSelect = input("2. Ver rutas desde mi estacion de salida")
+    print("1. Regenerar grafo / Mostrar mapa original")
+    print("2. Ver rutas desde mi estacion de salida")
+    print("3. Salir del programa")
+    mainSelect = input("")
     if mainSelect == "1":
         pos = nx.spring_layout(G, k=0.9, iterations=30)
         nx.draw(G, pos, arrows=None, with_labels=True, node_size=800, font_size=6)
@@ -106,7 +108,12 @@ while(mainMenu):
         nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=6)
         plt.show()
     elif mainSelect == "2":
-        estacionInput = input("Introduce el nombre de la estacion de salida: ")
+        print("Introduce el nombre de la estacion de salida: ")
+        estacionInput = input("")
         while estacionInput not in nodeSet:
-            estacionInput = input("Introduce el nombre de la estacion de salida: ")
+            print("Introduce el nombre de la estacion de salida: ")
+            estacionInput = input("")
         Dijkstra(estacionInput)
+        input("Ingrese cualquier caracter para regresar al menu principal")
+    elif mainSelect == "3":
+        exit()
