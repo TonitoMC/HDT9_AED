@@ -4,8 +4,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import heapq
 
-#Crea el grafo basado en el archivo de texto
+#José Mérida / Adrián  López
+#Este programa utiliza el algoritmo de Dijkstra para encontrar la ruta más corta entre diferentes estaciones. Lee
+#los datos de un archivo "rutas.txt" y despliega un grafo, luego se puede elegir una estacion de salida para poder
+#ver las rutas y posibles destinos.
+
+#Crea el grafo basado en el archivo de texto y el grafo basado en una estacion inicial
 G = nx.Graph()
+D = nx.Graph()
 with open("rutas.txt", "r") as file:
     #Para cada linea del archivo
     for line in file:
@@ -28,7 +34,7 @@ labels= nx.get_node_attributes(G, 'weight')
 edge_labels = dict([((n1, n2), G[n1][n2]['weight'])
                     for n1, n2 in G.edges])
 nx.draw_networkx_edge_labels(G, pos,edge_labels=edge_labels, font_size = 6)
-
+plt.show()
 nodeSet = set(G.nodes())
 
 #Dijkstra
@@ -67,9 +73,11 @@ def Dijkstra(startNode):
                 predecessors[neighbor] = current_node  # Actualiza el nodo predecesor para el vecino
                 heapq.heappush(heap, (distances[neighbor], neighbor))
         out_distances[current_node] = current_distance
-    # Imprime destinos y sus rutas, borra startNode de los valores del diccionario
+    # Imprime destinos y sus rutas, borra startNode de los valores del diccionario. Limpia tambien el grafo D
+    # que representa el grafo de salida basado en la estacion actual.
     D.clear()
     del out_distances[startNode]
+    #Para cada par de "destinom, distance" en el diccionario de salida
     for destination, distance in out_distances.items():
         route = [destination]
         predecessor = destination
@@ -79,9 +87,11 @@ def Dijkstra(startNode):
             route.append(predecessor)
         route.reverse()  # Invierte la ruta para imprimirla desde el nodo inicial hasta el destino
         print(f"Destino: {destination}, Ruta: {' -> '.join(route)}, Distancia: {distance}")
+        # Agrega los nodos necesarios al grafo
         for i in range (0, len(route) - 1):
             D.add_node(route[i])
         D.add_edge(startNode, destination, weight=distance)
+    #Dibuja el grafo
     pos = nx.spring_layout(D, k=0.9, iterations=30)
     nx.draw(D, pos, arrows=None, with_labels=True, node_size=800, font_size=6)
     edge_labels = dict([((n1, n2), D[n1][n2]['weight'])
@@ -89,8 +99,7 @@ def Dijkstra(startNode):
     nx.draw_networkx_edge_labels(D, pos, edge_labels=edge_labels, font_size=6)
     plt.show()
 
-D = nx.Graph()
-plt.show()
+#Menu con el que interactua el usuario
 mainMenu = True
 while(mainMenu):
     print("Bienvenido al programa para agendar viajes, puedes consultar la imagen generada para ver las posibles rutas")
@@ -116,4 +125,4 @@ while(mainMenu):
         Dijkstra(estacionInput)
         input("Ingrese cualquier caracter para regresar al menu principal")
     elif mainSelect == "3":
-        exit()
+        mainMenu = False
