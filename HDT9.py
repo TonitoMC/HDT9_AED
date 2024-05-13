@@ -1,5 +1,6 @@
 import networkx as nx
 import csv
+import numpy as np
 import matplotlib.pyplot as plt
 destinations_set = set()
 
@@ -20,7 +21,21 @@ pos = nx.spring_layout(G, k=0.9, iterations=30)
 
 nx.draw(G, pos, arrows=None, with_labels=True, node_size = 450)
 
+#Dijkstra
+def Dijkstra (startNode):
+    unvisited_nodes = list(G)
+    distances = {}
+    for item in list(G):
+        distances.update({item: inf})
+    distances.update({startNode: 0})
+    for node in unvisited_nodes:
+        currentNode = node
+
+
 def get_routes_from_start(startNode):
     return 1
+
+def draw_graph_from_start(startNode):
+
 
 plt.show()
