@@ -21,9 +21,15 @@ with open("rutas.txt", "r") as file:
         #Agrega las relaciones entre nodos
         G.add_edge(node1, node2, weight=weight)
 
-# Dibuja el grafo
+# Dibuja el grafo, se utiliza un spring layout para que no haya overlap entre destinos
 pos = nx.spring_layout(G, k=0.9, iterations=30)
-nx.draw(G, pos, arrows=None, with_labels=True, node_size=450)
+nx.draw(G, pos, arrows=None, with_labels=True, node_size=800, font_size=6)
+labels= nx.get_node_attributes(G, 'weight')
+edge_labels = dict([((n1, n2), G[n1][n2]['weight'])
+                    for n1, n2 in G.edges])
+nx.draw_networkx_edge_labels(G, pos,edge_labels=edge_labels, font_size = 6)
+
+nodeSet = set(G.nodes())
 
 #Dijkstra
 def Dijkstra(startNode):
@@ -61,8 +67,9 @@ def Dijkstra(startNode):
                 predecessors[neighbor] = current_node  # Actualiza el nodo predecesor para el vecino
                 heapq.heappush(heap, (distances[neighbor], neighbor))
         out_distances[current_node] = current_distance
-
-    # Imprime destinos y sus rutas
+    D = nx.Graph()
+    # Imprime destinos y sus rutas, borra startNode de los valores del diccionario
+    del out_distances[startNode]
     for destination, distance in out_distances.items():
         route = [destination]
         predecessor = destination
@@ -71,10 +78,35 @@ def Dijkstra(startNode):
             predecessor = predecessors[predecessor]
             route.append(predecessor)
         route.reverse()  # Invierte la ruta para imprimirla desde el nodo inicial hasta el destino
-        print(f"Destination: {destination}, Route: {' -> '.join(route)}, Distance: {distance}")
-
-
-Dijkstra("Pueblo Paleta")
+        print(f"Destino: {destination}, Ruta: {' -> '.join(route)}, Distancia: {distance}")
+        for i in range (0, len(route) - 1):
+            D.add_node(route[i])
+        D.add_edge(startNode, destination, weight=distance)
+    pos = nx.spring_layout(D, k=0.9, iterations=30)
+    nx.draw(D, pos, arrows=None, with_labels=True, node_size=800, font_size=6)
+    edge_labels = dict([((n1, n2), D[n1][n2]['weight'])
+                        for n1, n2 in D.edges])
+    nx.draw_networkx_edge_labels(D, pos, edge_labels=edge_labels, font_size=6)
+    plt.show()
 
 
 plt.show()
+mainMenu = True
+while(mainMenu):
+    print("Bienvenido al programa para agendar viajes, puedes consultar la imagen generada para ver las posibles rutas")
+    print("o igresar el numero correspondiente a cualquiera de las opciones a continuacion")
+    print("1. Regenerar grafo (En caso que exista un overlap de los nodos o no se vea claramente)")
+    mainSelect = input("2. Ver rutas desde mi estacion de salida")
+    if mainSelect == "1":
+        pos = nx.spring_layout(G, k=0.9, iterations=30)
+        nx.draw(G, pos, arrows=None, with_labels=True, node_size=800, font_size=6)
+        labels = nx.get_node_attributes(G, 'weight')
+        edge_labels = dict([((n1, n2), G[n1][n2]['weight'])
+                            for n1, n2 in G.edges])
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=6)
+        plt.show()
+    elif mainSelect == "2":
+        estacionInput = input("Introduce el nombre de la estacion de salida: ")
+        while estacionInput not in nodeSet:
+            estacionInput = input("Introduce el nombre de la estacion de salida: ")
+        Dijkstra(estacionInput)
